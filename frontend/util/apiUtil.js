@@ -5,6 +5,13 @@ var apiUtil = {
     $.get("api/pokemon","json", function(data) {
       PokemonActions.receiveAllPokemons(data);
     });
+  },
+
+  fetchPokemon: function(id) {
+    var url = "api/pokemon/" + id;
+    $.get(url, "json", function(data) {
+      PokemonActions.receiveSinglePokemon(data);
+    });
   }
 };
 

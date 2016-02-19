@@ -7,7 +7,7 @@ var PokemonConstants = require('../constants/pokemonConstants');
 var PokemonStore = new Store(Dispatcher);
 
 var _pokemons = {};
-
+var _currentPokemon;
 PokemonStore.resetPokemons = function(pokemons) {
   _pokemons = {};
   pokemons.forEach(function(pokemon) {
@@ -19,8 +19,11 @@ PokemonStore.resetPokemons = function(pokemons) {
 PokemonStore.__onDispatch = function(payload) {
   switch(payload.actionType) {
     case PokemonConstants.POKEMONS_RECEIVED:
-    PokemonStore.resetPokemons(payload.data);
-    break;
+      PokemonStore.resetPokemons(payload.data);
+      break;
+    case PokemonConstants.SINGLE_POKEMON_RECEIVED:
+      PokemonStore.resetCurrentPokemon(payload.data);
+      break;
   }
 };
 
@@ -30,6 +33,30 @@ PokemonStore.all = function(){
     pokeList.push(_pokemons[key]);
   });
   return pokeList;
+};
+
+PokemonStore.find = function(pokemonId) {
+  return _pokemons[pokemonId];
+};
+
+PokemonStore.findToy= function(pokemonId, toyId){
+  var pokemon = PokemonStore.find(pokemonId);
+  var toy;
+  pokemon.toys.forEach(function(el) {
+    if (el.id === toyId) {
+      toy = el;
+    }
+  });
+  return toy;
+};
+
+PokemonStore.resetCurrentPokemon = function(pokemon) {
+  _currentPokemon = pokemon;
+  PokemonStore.__emitChange();
+};
+
+PokemonStore.current = function() {
+  return _currentPokemon;
 };
 
 window.PokemonStore = PokemonStore;

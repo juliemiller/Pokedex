@@ -11,7 +11,6 @@ var PokemonsIndex = React.createClass({
   _onChange: function() {
     this.setState({ pokemons: PokemonStore.all()});
   },
-
   componentDidMount: function() {
     this.indexListener = PokemonStore.addListener(this._onChange);
     apiUtil.fetchAllPokemons();
